@@ -1,0 +1,24 @@
+{
+  "name": "slack-bot-attendance",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node -i -p --esm ./src/1_purity.ts",
+    "part4": "ts-node -i -p --esm ./src/4_either.ts",
+    "watch": "ts-node-dev --respawn ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@effect-ts/core": "^0.60.5",
+    "@slack/events-api": "^3.0.1",
+    "lodash": "^4.17.21"
+  }
+}
