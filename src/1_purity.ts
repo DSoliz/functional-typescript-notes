@@ -52,23 +52,25 @@ const addToArray4 = (list: number[], a: number) => map(list, (element: number) =
 addToArray4([1, 2, 3, 4], 4) // [5,6,7,8]
 
 /**
- * Purity at glance
+ * Purity at Glance
  */
 let mutableVar = 'initial'
 let mutableShouldSkip = true
 
+// Impure functions are unpredictable because of side effects, this also makes them harder to unit test as you will need to mock the environment it runs on. However most of the useful things we do are side effects, FP has ways of nicely dealing with the unpredictability of impure functions.
 const impureFunction = () => {
-  if(mutableShouldSkip) { // side effect reading outside of scope
+  if(mutableShouldSkip) { // side effect: reading outside of scope, we have no guarantees about the value of this function.
     return null
   }
 
-  mutableVar = 'different' // side effect writing outside of scope
+  mutableVar = 'different' // side effect: writing outside of scope.
 
   return mutableVar
 }
 
+// Pure functions are deterministic and therefore predictable, easy to unit test too.
 const pureFunction = (shouldSkip: boolean) => {
-  if(shouldSkip) { // side effect reading outside of scope
+  if(shouldSkip) {
     return null
   }
 

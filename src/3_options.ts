@@ -1,4 +1,70 @@
 /**
+ * Option at a Glance
+ * 
+ * Let's start with a common pattern that arises from the need to validate if a piece of data exists. Here we define a function that checks if a user is low on funds.
+ */
+declare const getUserById: (userId: string) => object | null;
+declare const getPrimaryAccount: (user: object) => object | null;
+declare const getBalance: (account: object) => number | null;
+declare const lowBalanceCheck: (balance: number) => boolean | null;
+
+const checkPrimaryAccountLowBalance1 = (userId: string) => {
+  const user = getUserById(userId)
+  if (user) {
+    const account = getPrimaryAccount(user)
+
+    if (account) {
+      const balance = getBalance(account)
+
+      if (balance) {
+        const hasLowFunds = lowBalanceCheck(balance)
+
+        return hasLowFunds
+      }
+    }
+  }
+
+  return null
+}
+
+// We can attempt to get rid of the pyramid by using other patterns but the check is still there and it is almost begging to be abstracted away.
+const checkPrimaryAccountLowBalance2 = (userId: string) => {
+  const user = getUserById(userId)
+  if (!user) {
+    return null
+  }
+
+  const account = getPrimaryAccount(user)
+  if (!account) {
+    return null
+  }
+
+  const balance = getBalance(account)
+  if (!balance) {
+    return null
+  }
+
+  const hasLowFunds = lowBalanceCheck(balance)
+
+  return hasLowFunds
+}
+
+/**
+ * Options and chains/flatMap will enable us to abstract away the if checks an will get us here
+ */
+declare const getUserByIdFp: (userId: string) => O.Option<object>;
+declare const getPrimaryAccountFp: (user: object) => O.Option<object>;
+declare const getBalanceFp: (account: object) => O.Option<number>;
+declare const lowBalanceCheckFp: (balance: number) => O.Option<boolean>;
+
+const checkPrimaryAccountLowBalanceFp = flow(
+  getUserByIdFp,
+  O.chain(getPrimaryAccountFp),
+  O.chain(getBalanceFp),
+  O.chain(lowBalanceCheckFp),
+)
+
+/**
  * For some inputs, some functions may map to nothing or null. We can use nothing to express that an input maps to no value. We may also use this as basic error prevention.
  */
 
@@ -122,71 +188,6 @@ halfIfEvenThreeTimesFlow(0)  // Some { _tag: 'Some', value: 0 }
 /**
  * In the next section we will be doing some nice error handling with a the Either type.
  */
-
-/**
- * Option at a Glance
- * 
- * Let's start with a common pattern that arises from the need to validate if a piece of data exists. Here we define a function that checks if a user is low on funds.
- */
-declare const getUserById: (userId: string) => object | null;
-declare const getPrimaryAccount: (user: object) => object | null;
-declare const getBalance: (account: object) => number | null;
-declare const lowBalanceCheck: (balance: number) => boolean | null;
-
-const checkPrimaryAccountLowBalance1 = (userId: string) => {
-  const user = getUserById(userId)
-  if (user) {
-    const account = getPrimaryAccount(user)
-
-    if (account) {
-      const balance = getBalance(account)
-
-      if (balance) {
-        const hasLowFunds = lowBalanceCheck(balance)
-
-        return hasLowFunds
-      }
-    }
-  }
-
-  return null
-}
-
-const checkPrimaryAccountLowBalance2 = (userId: string) => {
-  const user = getUserById(userId)
-  if (!user) {
-    return null
-  }
-
-  const account = getPrimaryAccount(user)
-  if (!account) {
-    return null
-  }
-
-  const balance = getBalance(account)
-  if (!balance) {
-    return null
-  }
-
-  const hasLowFunds = lowBalanceCheck(balance)
-
-  return hasLowFunds
-}
-
-/**
- * Options will enable us to abstract away the if checks an will get us here
- */
-declare const getUserByIdFp: (userId: string) => O.Option<object>;
-declare const getPrimaryAccountFp: (user: object) => O.Option<object>;
-declare const getBalanceFp: (account: object) => O.Option<number>;
-declare const lowBalanceCheckFp: (balance: number) => O.Option<boolean>;
-
-const checkPrimaryAccountLowBalanceFp = flow(
-  getUserByIdFp,
-  O.chain(getPrimaryAccountFp),
-  O.chain(getBalanceFp),
-  O.chain(lowBalanceCheckFp),
-)
 
 /**
  * Note: To fully understand some of these patterns is to dive into category theory. Here is a good source to start doing that examples in this section were also inspired by it. https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html

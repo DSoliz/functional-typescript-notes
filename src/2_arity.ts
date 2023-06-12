@@ -96,14 +96,17 @@ chain([1, 2, 3, 4])
  */
 
 /**
+ * Arity at a Glance
  * Let's start with a common pattern.
  */
 declare const getUserById: (id: string) => object
 declare const readFile: (path: string) => string
 declare const calculateTotalAfterTax: (item: object) => number
 
+// This function receives two inputs hence it has arity 2, as we will see this will make it more tedious to compose 
 declare const regularMap: <A, B>(list: A[], mapper: (element: A) => B) => B[]
 
+// Painful, we now have to define an input and type it and it can get worse the more arity is increase
 const getUsersById = (list: string[]) => regularMap(list, getUserById)
 const getFiles = (list: string[]) => regularMap(list, readFile)
 const calculateItemsTotalAfterTax = (list: object[]) => regularMap(list, calculateTotalAfterTax)
