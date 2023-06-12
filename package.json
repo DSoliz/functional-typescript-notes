@@ -1,17 +1,16 @@
 {
-  "name": "slack-bot-attendance",
+  "name": "fp-ts-notes",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "part1": "ts-node -i -p --esm ./src/1_purity.ts",
-    "part2": "ts-node -i -p --esm ./src/2_either.ts",
-    "part3": "ts-node -i -p --esm ./src/3_either.ts",
+    "part2": "ts-node -i -p --esm ./src/2_arity.ts",
+    "part3": "ts-node -i -p --esm ./src/3_options.ts",
     "part4": "ts-node -i -p --esm ./src/4_either.ts",
     "watch": "ts-node-dev --respawn ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "ts-node": "^10.9.1",
