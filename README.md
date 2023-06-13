@@ -23,10 +23,13 @@ https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictu
 ## Running the code
 while running the code for the notes is not too interesting here is how you would do it.
 
-you may need to add console logs to the execution of some functions to see results or better yet attach a debugger
+you may need to add console logs to the execution of some functions to see results or attach a debugger
+
 
 ```
 npm install
 
 npm run part1
 ```
+
+Note: Running in interactive mode is not working for some reason
