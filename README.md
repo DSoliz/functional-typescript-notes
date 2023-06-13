@@ -6,7 +6,13 @@ I mainly use the `@effect-ts` library as it a new library that offers very neat 
 
 When going over the notes please check the type signatures as these will aid you in understanding how the data is being transformed.
 
+Important: to read easily read the comments enable text soft wrap in your editor (option + z)
+
 ## Learning Resources
+
+Here is a very nice talk about functional programming and the resulting architecture it leads to.
+
+https://www.youtube.com/watch?v=US8QG9I1XW0
 
 Since `@fp-ts` is so similar here is a good visual resource to begin understanding the base concepts:
 
