@@ -59,9 +59,9 @@ declare const lowBalanceCheckFp: (balance: number) => O.Option<boolean>;
 
 const checkPrimaryAccountLowBalanceFp = flow(
   getUserByIdFp,
-  O.chain(getPrimaryAccountFp),
-  O.chain(getBalanceFp),
-  O.chain(lowBalanceCheckFp),
+  O.flatMap(getPrimaryAccountFp),
+  O.flatMap(getBalanceFp),
+  O.flatMap(lowBalanceCheckFp),
 )
 
 /**
@@ -88,14 +88,14 @@ type TCombineTwoNumbersNullable = (a: number) => (b: number) => number | null
  */
 
 // In the effect-ts fp-ts libraries Option is either some value or none.
-import * as O from '@effect-ts/core/Option'
+import O from 'effect/Option'
 
 /**
  * Here below we use Option to make a safe division function, we have prevented the error and out type signature expresses the possibility that an input may map to to nothing.
  */
 const safeDivision: TCombineTwoNumbersOption = a => b => {
   if (b === 0) {
-    return O.none
+    return O.none()
   }
   return O.some(a / b)
 }
@@ -113,7 +113,7 @@ const halfIfEven: HalfIfEven = a => {
   if (a % 2 == 0) {
     return O.some(a / 2)
   } else {
-    return O.none
+    return O.none()
   }
 }
 
@@ -126,7 +126,7 @@ const five = halfIfEven(10) // Some { _tag: 'Some', value: 5 }
 // halfIfEven(five.value) // This will throw type errors as we don't know with certainty if five contains a value or not
 
 // This also means that piping the function is now broken
-import { pipe } from '@effect-ts/core/Function'
+import { pipe } from 'effect/Function'
 
 // pipe(
 //   10,
@@ -147,37 +147,38 @@ if (O.isSome(forty)) {
 }
 
 // Gladly Options have a flatMap function called chain in this library! This allows us to feed Options to functions that don't take Options.
-O.chain(halfIfEven)(five) // None { _tag: 'None' }
+O.flatMap(halfIfEven)(five) // None { _tag: 'None' }
 
 // optionHalfIfEven takes an Option which it then flattens/unwraps it back to a value and feeds it to halfIfEven.
-const optionHalfIfEven = O.chain(halfIfEven)
+const optionHalfIfEven = O.flatMap(halfIfEven)
 
 optionHalfIfEven(five) // None { _tag: 'None' }
 optionHalfIfEven(O.some(4)) // Some { _tag: 'Some', value: 2 }
-optionHalfIfEven(O.none) // None { _tag: 'None' }
+optionHalfIfEven(O.none()) // None { _tag: 'None' }
 // optionHalfIfEven(5)
 
 // Now we can compose pipelines in cleaner ways as the `if` checks have been abstracted away.
 
 // The ugly way.
 const halfIfEvenThreeTimes = (v: number) =>
-  O.chain(halfIfEven)(O.chain(halfIfEven)(halfIfEven(v)))
+  O.flatMap(halfIfEven)(O.flatMap(halfIfEven)(halfIfEven(v)))
 
 // Nice way.
 const halfIfEvenThreeTimesPipe = (v: number) =>
   pipe(
     halfIfEven(v),
-    O.chain(halfIfEven),
-    O.chain(halfIfEven),
+    O.flatMap(halfIfEven),
+    O.flatMap(halfIfEven),
   )
 
-import { flow } from '@effect-ts/core/Function'
+import { flow } from 'effect/Function'
+import { number } from 'effect/Equivalence';
 
 // Cool way.
 const halfIfEvenThreeTimesFlow = flow(
   halfIfEven,
-  O.chain(halfIfEven),
-  O.chain(halfIfEven),
+  O.flatMap(halfIfEven),
+  O.flatMap(halfIfEven),
 )
 
 halfIfEvenThreeTimesFlow(40) // Some { _tag: 'Some', value: 5 }
