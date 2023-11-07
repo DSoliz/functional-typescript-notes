@@ -27,7 +27,7 @@ const checkPrimaryAccountLowBalance1 = (userId: string) => {
   return null
 }
 
-// We can attempt to get rid of the pyramid by using other patterns but the check is still there and it is almost begging to be abstracted away.
+// We can attempt to get rid of the pyramid by using other patterns but the check is still there and it is begging to be abstracted away.
 const checkPrimaryAccountLowBalance2 = (userId: string) => {
   const user = getUserById(userId)
   if (!user) {
@@ -172,7 +172,6 @@ const halfIfEvenThreeTimesPipe = (v: number) =>
   )
 
 import { flow } from 'effect/Function'
-import { number } from 'effect/Equivalence';
 
 // Cool way.
 const halfIfEvenThreeTimesFlow = flow(
